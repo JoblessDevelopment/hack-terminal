@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Terminal Hacker</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background: linear-gradient(to bottom right, yellow, red);
+      font-family: monospace;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    h1 {
+      color: #222;
+      margin-top: 40px;
+      font-weight: bold;
+    }
+
+    #terminal {
+      background: #000000cc;
+      width: 90%;
+      max-width: 600px;
+      height: 300px;
+      padding: 15px;
+      overflow-y: auto;
+      border-radius: 8px;
+      margin-top: 20px;
+      font-size: 14px;
+      white-space: pre-wrap;
+    }
+
+    #controls {
+      margin: 20px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    button {
+      background-color: orange;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    button:hover {
+      background-color: darkorange;
+    }
+
+    footer {
+      margin-bottom: 20px;
+      color: #222;
+    }
+
+    .status {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Terminal Hacker</h1>
+  <div id="terminal">Initializing...</div>
+
+  <div id="controls">
+    <button onclick="startHack()">Hack!</button>
+    <div class="status">
+      <div>Score: <span id="score">0</span></div>
+      <div>Time: <span id="timer">30</span>s</div>
+    </div>
+  </div>
+
+  <footer>created by jobless</footer>
+
+  <audio id="success-sound" src="https://www.soundjay.com/button/sounds/button-3.mp3"></audio>
+  <audio id="fail-sound" src="https://www.soundjay.com/button/sounds/beep-05.mp3"></audio>
+
+  <script>
+    const terminal = document.getElementById("terminal");
+    const timerEl = document.getElementById("timer");
+    const scoreEl = document.getElementById("score");
+    const successSound = document.getElementById("success-sound");
+    const failSound = document.getElementById("fail-sound");
+
+    let score = 0;
+    let time = 30;
+    let gameInterval;
+
+    function writeLine(text) {
+      terminal.textContent += "\n" + text;
+      terminal.scrollTop = terminal.scrollHeight;
+    }
+
+    function getRandomCommand() {
+      const cmds = ["Accessing node...", "Bypassing firewall...", "Injecting script...", "Decrypting hash...", "Override protocol..."];
+      return cmds[Math.floor(Math.random() * cmds.length)];
+    }
+
+    function getRandomSuccess() {
+      return Math.random() < 0.7;
+    }
+
+    function startHack() {
+      const command = getRandomCommand();
+      writeLine("> " + command);
+      if (getRandomSuccess()) {
+        writeLine("Success!");
+        successSound.play();
+        score++;
+      } else {
+        writeLine("Access Denied!");
+        failSound.play();
+      }
+      scoreEl.textContent = score;
+    }
+
+    function startGame() {
+      terminal.textContent = "Booting system...";
+      score = 0;
+      scoreEl.textContent = 0;
+      time = 30;
+      timerEl.textContent = time;
+
+      clearInterval(gameInterval);
+      gameInterval = setInterval(() => {
+        time--;
+        timerEl.textContent = time;
+        if (time <= 0) {
+          clearInterval(gameInterval);
+          writeLine("\nSession Ended.");
+        }
+      }, 1000);
+    }
+
+    // Start automatically
+    startGame();
+  </script>
+</body>
+</html>
